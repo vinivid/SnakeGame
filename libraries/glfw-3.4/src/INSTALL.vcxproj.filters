@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="V:\Projetos\LearningCpp\LearningOpengl\Snake\CMakeFiles\dbaa188150c3221de2688afdd2eb3a88\INSTALL_force.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{4FECA567-46EC-314C-B4AA-89738EF3987A}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
