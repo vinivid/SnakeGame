@@ -4,6 +4,7 @@
 #include "shaders.hpp"
 #include "control.hpp"
 #include "camera.hpp"
+#include "snake.hpp"
 
 void process_input(GLFWwindow *window){
     if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -57,14 +58,14 @@ int main(void){
          0.5f,  0.5f, 0.0f,  0.211f, 0.211f, 0.211f,
 
         //Paralelepied
-        -0.25f, -0.5f,  -0.25f, 0.5f, 0.5f, 0.5f,// 0 4
-         0.25f, -0.5f,  -0.25f, 0.1f, 0.1f, 0.1f,// 1 5
-         0.25f, -0.5f,  0.25f, 0.3f, 0.3f, 0.3f,// 2 6
-         -0.25f, -0.5f, 0.25f, 0.0f, 1.0f, 0.0f,// 3 7
-         -0.25f,  0.5f, 0.25f, 0.0f, 0.0f, 1.0f,//4 8
-         -0.25f, 0.5f,  -0.25f, 1.0f, 0.0f, 0.0f, // 5 9
-         0.25f,  0.5f,  -0.25f, 0.0f, 0.25f, 0.5f, // 6 10
-         0.25f, 0.5f,  0.25f, 0.75f, 0.10f, 0.0f, // 7 11
+        -0.05f, -0.1f,  -0.05f, 0.5f, 0.5f, 0.5f,// 0 4
+         0.05f, -0.1f,  -0.05f, 0.1f, 0.1f, 0.1f,// 1 5
+         0.05f, -0.1f,  0.05f, 0.3f, 0.3f, 0.3f,// 2 6
+         -0.05f, -0.1f, 0.05f, 0.0f, 1.0f, 0.0f,// 3 7
+         -0.05f,  0.1f, 0.05f, 0.0f, 0.0f, 1.0f,//4 8
+         -0.05f, 0.1f,  -0.05f, 1.0f, 0.0f, 0.0f, // 5 9
+         0.05f,  0.1f,  -0.05f, 0.0f, 0.25f, 0.5f, // 6 10
+         0.05f, 0.1f,  0.05f, 0.75f, 0.10f, 0.0f, // 7 11
 
     };
 
@@ -109,11 +110,13 @@ int main(void){
 
     Control ctt;
     Camera sts;
+    Snake snk;
 
     glfwSetCursorPos(window, 0, 0);
     ctt.add_perspective_frustum(90.0f, 800.0f, 600.0f, 0.1f, 100.0f);
 
     glEnable(GL_DEPTH_TEST);
+    glBindVertexArray(VAO);
 
     while(!glfwWindowShouldClose(window))
     {   
@@ -126,13 +129,8 @@ int main(void){
         sts.read_mouse(window);
         ctt.set_view_mat(sts.get_view_matrix());
 
-        glBindVertexArray(VAO);
-
-        ctt.add_translate(0.0f,0, 3.0f);
-        ctt.make_comb_mat();
-        test_shader.set_uniform_mat4f("translate", ctt.comb_mat_pointer());
-
-        glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, (void *)(6*sizeof(float)));
+        snk.move();
+        snk.draw_snake(ctt, test_shader);
 
         glfwSwapBuffers(window);
         process_input(window);

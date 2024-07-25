@@ -12,6 +12,7 @@ add_subdirectory(libraries/glfw-3.4)
 add_subdirectory(libraries/control)
 add_subdirectory(libraries/camera)
 add_subdirectory(libraries/glad)
+add_subdirectory(libraries/Snake)
 
 add_executable(Snake
     main.cpp
@@ -23,3 +24,4 @@ target_link_libraries(Snake camera)
 target_link_libraries(Snake control)
 target_link_libraries(Snake OpenGL::GL)
 target_link_libraries(Snake glfw)
+target_link_libraries(Snake snake_ctrl)
