@@ -58,14 +58,14 @@ int main(void){
          0.5f,  0.5f, 0.0f,  0.211f, 0.211f, 0.211f,
 
         //Paralelepied
-        -0.05f, -0.1f,  -0.05f, 0.5f, 0.5f, 0.5f,// 0 4
-         0.05f, -0.1f,  -0.05f, 0.1f, 0.1f, 0.1f,// 1 5
-         0.05f, -0.1f,  0.05f, 0.3f, 0.3f, 0.3f,// 2 6
-         -0.05f, -0.1f, 0.05f, 0.0f, 1.0f, 0.0f,// 3 7
-         -0.05f,  0.1f, 0.05f, 0.0f, 0.0f, 1.0f,//4 8
-         -0.05f, 0.1f,  -0.05f, 1.0f, 0.0f, 0.0f, // 5 9
-         0.05f,  0.1f,  -0.05f, 0.0f, 0.25f, 0.5f, // 6 10
-         0.05f, 0.1f,  0.05f, 0.75f, 0.10f, 0.0f, // 7 11
+        -0.05f, -0.05f,  -0.05f, 0.5f, 0.5f, 0.5f,// 0 4
+         0.05f, -0.05f,  -0.05f, 0.1f, 0.1f, 0.1f,// 1 5
+         0.05f, -0.05f,  0.05f, 0.3f, 0.3f, 0.3f,// 2 6
+         -0.05f, -0.05f, 0.05f, 0.0f, 1.0f, 0.0f,// 3 7
+         -0.05f,  0.05f, 0.05f, 0.0f, 0.0f, 1.0f,//4 8
+         -0.05f, 0.05f,  -0.05f, 1.0f, 0.0f, 0.0f, // 5 9
+         0.05f,  0.05f,  -0.05f, 0.0f, 0.25f, 0.5f, // 6 10
+         0.05f, 0.05f,  0.05f, 0.75f, 0.10f, 0.0f, // 7 11
 
     };
 
@@ -113,7 +113,7 @@ int main(void){
     Snake snk;
 
     glfwSetCursorPos(window, 0, 0);
-    ctt.add_perspective_frustum(90.0f, 800.0f, 600.0f, 0.1f, 100.0f);
+    ctt.add_perspective_frustum(60.0f, 800.0f, 600.0f, 0.1f, 100.0f);
 
     glEnable(GL_DEPTH_TEST);
     glBindVertexArray(VAO);
@@ -129,6 +129,7 @@ int main(void){
         sts.read_mouse(window);
         ctt.set_view_mat(sts.get_view_matrix());
 
+        snk.key_press(window);
         snk.move();
         snk.draw_snake(ctt, test_shader);
 
