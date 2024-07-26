@@ -3,6 +3,7 @@
 #include <glm/ext/matrix_clip_space.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "control.hpp"
+#include "glm/fwd.hpp"
 #include "glm/trigonometric.hpp"
 
 Control::Control(){
@@ -22,8 +23,8 @@ void Control::add_translate(float x, float y, float z){
     translate = glm::translate(glm::mat4(1.0f), glm::vec3(x,y,z));
 }
 
-void Control::add_scale(glm::vec3 &v){
-    scale = glm::scale(glm::mat4(1.0f), v);
+void Control::add_scale(float x, float y, float z){
+    scale = glm::scale(glm::mat4(1.0f), glm::vec3(x,y,z));
 }
 
 void Control::add_perspective_frustum(float fov, float width, float height, float near, float far){
@@ -35,7 +36,7 @@ void Control::set_view_mat(glm::mat4& mat){
 }
 
 void Control::make_comb_mat(){
-    comb_mat = perspective_frustum * view_matrix* scale * translate * rotate;
+    comb_mat = perspective_frustum * view_matrix* translate  * scale * rotate;
 }
 
 float* Control::rotate_pointer(){

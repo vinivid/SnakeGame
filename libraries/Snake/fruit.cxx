@@ -3,13 +3,12 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include <iterator>
-#include <random>
 #include <set>
 #include "shaders.hpp"
 #include "control.hpp"
 
 fruit::fruit(){
-    pos_x = 0.20f;
+    pos_x = -0.50f;
     pos_y = 0.05f;
 }
 
@@ -22,24 +21,13 @@ void fruit::gen_new_fruit(const std::set<unsigned> &occupied){
 
     unsigned row = pos/20;
     unsigned colum = pos%20;
-
-    std::cout << "row: " << row << " colum: " << colum << "\n";
     
-    //This is a simple condition so the colums and rows can be transformed
-    //into coordinates for rendering
-    if(row <= 10){
-        //the casting is necessary because the position is float and it can give 
-        //negative numbers
-        pos_y =  ((10 - static_cast<float>(row)) - 0.5f)/10;
-    }else{
-        pos_y =  ((10 - static_cast<float>(row)) + 0.5f)/10;
-    }
-
-    if(colum <= 10){
-        pos_x = ((10 - static_cast<float>(colum)) - 0.5f)/10;
-    }else{
-        pos_x = ((10 - static_cast<float>(colum)) + 0.5f)/10;
-    } 
+    //This is a simple condition so the colums and rows can be transformed to coordinates
+    //to render
+    //the casting is necessary because the position is float and 10 - coordinate should give 
+    //negative numbers
+    pos_y =  ((10 - static_cast<float>(row)) - 0.5f)/10;
+    pos_x = ((10 - static_cast<float>(colum)) - 0.5f)/10;
 }
 
 

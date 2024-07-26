@@ -18,7 +18,7 @@ class Control{
 
         void add_rotate(float angle, glm::vec3 &v);
         void add_translate(float x, float y, float z);
-        void add_scale(glm::vec3 &v);
+        void add_scale(float x, float y, float z);
         void add_perspective_frustum(float fov, float width, float height, float near, float far);
 
         void set_view_mat(glm::mat4& mat);
