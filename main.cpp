@@ -1,10 +1,12 @@
 #include <iostream>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <set>
 #include "shaders.hpp"
 #include "control.hpp"
 #include "camera.hpp"
 #include "snake.hpp"
+#include "fruit.hpp"
 
 void process_input(GLFWwindow *window){
     if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -111,12 +113,22 @@ int main(void){
     Control ctt;
     Camera sts;
     Snake snk;
+    fruit frt;
 
     glfwSetCursorPos(window, 0, 0);
     ctt.add_perspective_frustum(60.0f, 800.0f, 600.0f, 0.1f, 100.0f);
 
     glEnable(GL_DEPTH_TEST);
     glBindVertexArray(VAO);
+
+    std::set<unsigned> ves;
+    ves.insert(15);
+    ves.insert(75);
+    ves.insert(35);
+    ves.insert(212);
+    ves.insert(300);
+    ves.insert(275);
+
 
     while(!glfwWindowShouldClose(window))
     {   
@@ -132,6 +144,7 @@ int main(void){
         snk.key_press(window);
         snk.move();
         snk.draw_snake(ctt, test_shader);
+        frt.draw_fruit(ctt, test_shader);
 
         glfwSwapBuffers(window);
         process_input(window);

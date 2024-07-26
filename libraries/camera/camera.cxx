@@ -39,8 +39,6 @@ void Camera::read_mouse(GLFWwindow* window){
     delta_pos_x = last_mouse_pos_x - xpos;
     delta_pos_y = (ypos - last_mouse_pos_y)/5.0f;
     last_mouse_pos_y = ypos;
-    std::cout << "last pos y: " << last_mouse_pos_y << "\n";
-    std::cout << "delta pos y: " << delta_pos_y << "\n";
     last_mouse_pos_x = xpos;
 }
 
