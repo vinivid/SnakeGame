@@ -23,21 +23,24 @@ struct body_part{
     direction dir;
 };
 
-//The snake doesn't depend on the fruit but the fruit depens on the snake
 class Snake{
     private:
-        std::set<unsigned> positions;
+        std::set<int> positions;
         std::list<std::pair<int, direction>> index_turn;
         std::vector<body_part> v{3};
         int routine_time = 6;
         int count_cicle = 6;
         bool used_queue = false;
         float routine_change = 0.017f;
+        int prev_removed = 183;
+        int prev_added = 185;
+
+        void add_part();
+        int check_next_pos(int p_added, fruit& frt);
     public:
         Snake();
 
-        void move();
+        int move(fruit& frt);
         void key_press(GLFWwindow *window);
         void draw_snake(Control &ctrl, Shader &shd);
-        void check_fruit(fruit& fruit);
 };

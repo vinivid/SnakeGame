@@ -8,26 +8,34 @@
 #include "control.hpp"
 
 fruit::fruit(){
-    pos_x = -0.50f;
+    pos_x = -0.55f;
     pos_y = 0.05f;
+    pos_coord = 195;
 }
 
-void fruit::gen_new_fruit(const std::set<unsigned> &occupied){
+void fruit::gen_new_fruit(const std::set<int> &occupied){
     //Gets a random value in the set of available positions
-    unsigned elemet_acces = std::rand() % occupied.size();
+    if(occupied.size() <= 0){
+        std::cout << "no spaces left to generate new fruit\n";
+        return;
+    }
+
+    int elemet_acces = std::rand() % occupied.size();
     auto it = occupied.begin();
     std::advance(it, elemet_acces);
-    unsigned pos = *it;
+    pos_coord = *it;
 
-    unsigned row = pos/20;
-    unsigned colum = pos%20;
+    int row = pos_coord/20;
+    int colum = pos_coord%20;
     
     //This is a simple condition so the colums and rows can be transformed to coordinates
     //to render
     //the casting is necessary because the position is float and 10 - coordinate should give 
     //negative numbers
     pos_y =  ((10 - static_cast<float>(row)) - 0.5f)/10;
-    pos_x = ((10 - static_cast<float>(colum)) - 0.5f)/10;
+    pos_x = ((10 - static_cast<float>(colum)) - 1.5f)/10;
+    std::cout << "pos frt x: " << pos_x << " pos frt y: " << pos_y << "\n";
+    std::cout << "row colum pos: " << pos_coord << "\n";
 }
 
 
@@ -38,6 +46,7 @@ void fruit::draw_fruit(Control& ctrl, Shader &shd){
 
     ctrl.add_translate(pos_x, pos_y, 2);
     ctrl.add_rotate(static_cast<float>(6*glfwGetTime()), zaxis);
+    ctrl.add_scale(0.5, 0.5, 1);
     ctrl.make_comb_mat();
 
     shd.set_uniform_mat4f("translate", ctrl.comb_mat_pointer());

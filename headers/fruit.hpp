@@ -8,9 +8,10 @@
 struct fruit{
     float pos_x;
     float pos_y;
+    int pos_coord;
 
     fruit();
 
-    void gen_new_fruit(const std::set<unsigned> &occupied);
+    void gen_new_fruit(const std::set<int> &occupied);
     void draw_fruit(Control& ctrl, Shader &shd);
 };

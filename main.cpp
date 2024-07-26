@@ -2,6 +2,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <set>
+#include "glm/fwd.hpp"
 #include "shaders.hpp"
 #include "control.hpp"
 #include "camera.hpp"
@@ -41,23 +42,12 @@ int main(void){
 
     test_shader.use();
 
-    unsigned int texture1;
-    glGenTextures(1, &texture1);
-
-    glBindTexture(GL_TEXTURE_2D, texture1);
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_MIRRORED_REPEAT);
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
     float vertices[] = {
         //Square
-        -0.5f, -0.5f, 0.0f,  0.211f, 0.211f, 0.211f,
-        -0.5f,  0.5f, 0.0f,  0.211f, 0.211f, 0.211f,
-         0.5f, -0.5f, 0.0f,  0.211f, 0.211f, 0.211f,
-         0.5f,  0.5f, 0.0f,  0.211f, 0.211f, 0.211f,
+        -1.0f, -1.0f, 2.01f,  0.211f, 0.211f, 0.211f,
+        -1.0,  1.0f, 2.01f,  0.211f, 0.211f, 0.211f,
+         1.0f, -1.0, 2.01f,  0.211f, 0.211f, 0.211f,
+         1.0,  1.0f, 2.01f,  0.211f, 0.211f, 0.211f,
 
         //Paralelepied
         -0.05f, -0.05f,  -0.05f, 0.5f, 0.5f, 0.5f,// 0 4
@@ -121,14 +111,7 @@ int main(void){
     glEnable(GL_DEPTH_TEST);
     glBindVertexArray(VAO);
 
-    std::set<unsigned> ves;
-    ves.insert(15);
-    ves.insert(75);
-    ves.insert(35);
-    ves.insert(212);
-    ves.insert(300);
-    ves.insert(275);
-
+    glm::vec3 v(0,0,1);
 
     while(!glfwWindowShouldClose(window))
     {   
@@ -137,12 +120,21 @@ int main(void){
 
         test_shader.use();
 
+        ctt.add_translate(0, 0, 0);
+        ctt.add_rotate(0, v);
+        ctt.add_scale(1, 1,1);
+        ctt.make_comb_mat();
+
+        test_shader.set_uniform_mat4f("translate", ctt.comb_mat_pointer());
+
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
         sts.read_keyboard(window);
         sts.read_mouse(window);
         ctt.set_view_mat(sts.get_view_matrix());
 
         snk.key_press(window);
-        snk.move();
+        snk.move(frt);
         snk.draw_snake(ctt, test_shader);
         frt.draw_fruit(ctt, test_shader);
 

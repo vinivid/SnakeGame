@@ -22,7 +22,7 @@ Snake::Snake(){
     positions.erase(183);
 
     //sets the heaad of the snake
-    v[0].x = 0.05f;
+    v[0].x = 0.45f;
     v[0].y = 0.05f;
     v[0].scale = 1;
     v[0].dir = right;
@@ -61,34 +61,27 @@ about 0.1s. It is necessary to make it so the snake walks in such way so every
 change will be delimited to the coordinate system.
 */
 
-void Snake::move(){
+int Snake::move(fruit& frt){
     count_cicle -= 1;
 
-    //std::cout << "pos x: " << v[0].x << " pos y: " << v[0].y << "\n"; 
-
     for(auto i = 0; i < v.size(); i++){
-        if(v[i].x <= 1 && v[i].x >= -1 && v[i].y <= 1 && v[i].y >= -1){
-            switch(v[i].dir){
-                case up:
-                    v[i].y += routine_change;
-                    break;
-                case down:
-                    v[i].y -= routine_change;
-                    break;
-                case left:
-                    v[i].x += routine_change;
-                    break;
-                case right:
-                    v[i].x -= routine_change;
-                    break;
-                default:
-                    std::cout << "Body part " << i << "has no valid direction\n";
-                    break;
-            }
-        }else{
-            v[i].x = 0.05f;
-            v[i].y = 0.05f;
-        }    
+        switch(v[i].dir){
+            case up:
+                v[i].y += routine_change;
+                break;
+            case down:
+                v[i].y -= routine_change;
+                break;
+            case left:
+                v[i].x += routine_change;
+                break;
+            case right:
+                v[i].x -= routine_change;
+                break;
+            default:
+                std::cout << "Body part " << i << "has no valid direction\n";
+                break;
+        }  
     }
 
     if(!(count_cicle)){
@@ -102,11 +95,63 @@ void Snake::move(){
                 it.first += 1;
             }
         }
+        
+        //Adds and removes from the position set
+        positions.insert(prev_removed);
+        switch(v[0].dir){
+            case up:
+                prev_added -= 20;
+                check_next_pos(prev_added-20, frt);
+                positions.erase(prev_added);
+                break;
+            case down:
+                prev_added += 20;
+                check_next_pos(prev_added+20, frt);
+                positions.erase(prev_added);
+                break;
+            case left:
+                prev_added -= 1;
+                check_next_pos(prev_added-1, frt);
+                positions.erase(prev_added);
+                break;
+            case right:
+                prev_added += 1;
+                check_next_pos(prev_added+1, frt);
+                positions.erase(prev_added);
+                break;
+            default:
+                break;
+        }
+
+        std::cout << "prev added: " << prev_added << "\n";
+        std::cout << "posx: " << v[0].x << " posy: " << v[0].y << "\n"; 
+
+        switch(v[v.size()-1].dir){
+            case up:
+                prev_removed -= 20;
+                break;
+            case down:
+                prev_removed += 20;
+                break;
+            case left:
+                prev_removed -= 1;
+                break;
+            case right:
+                prev_removed += 1;
+                break;
+            default:
+                break;
+        }
+
         used_queue = false;
         count_cicle = routine_time;
     }
+
+    return 0;
 }
 
+//Checks if an arrow key has been pressed, if it has been, put on the list, for it to
+//change the direction of the snake
 void Snake::key_press(GLFWwindow *window){
     if(glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS){
         if(!used_queue){
@@ -141,12 +186,64 @@ void Snake::draw_snake(Control &ctrl, Shader &shd){
     for(auto i:v){
         ctrl.add_translate(i.x, i.y, 2);
         ctrl.add_rotate(static_cast<float>(i.dir), zaxis);
-        ctrl.add_scale(1.0f, i.scale, 1.0f);
+        if(i.dir == left || i.dir == right){
+            ctrl.add_scale(1.0f, i.scale, 1.0f);
+        }else{
+            ctrl.add_scale(i.scale, 1.0f, 1.0f);
+        }
         ctrl.make_comb_mat();
 
         shd.set_uniform_mat4f("translate", ctrl.comb_mat_pointer());
 
         glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, (void *)(6*sizeof(float)));
     }
+}
 
+//Adds a new body part to the end of the snake
+void Snake::add_part(){
+    body_part to_add;
+    to_add.x = 0; to_add.y = 0; to_add.scale = 1; to_add.dir = right;
+
+    switch(v[v.size() - 1].dir){
+        case up:
+            to_add.x = v[v.size() - 1].x;
+            to_add.y = v[v.size() - 1].y;
+            to_add.y -= 0.1f;
+            break;
+        case down:
+            to_add.x = v[v.size() - 1].x;
+            to_add.y = v[v.size() - 1].y;
+            to_add.y += 0.1f;
+            break;
+        case left:
+            to_add.y = v[v.size() - 1].y;
+            to_add.x = v[v.size() - 1].x;
+            to_add.x -= 0.1f;
+            break;
+        case right:
+            to_add.y = v[v.size() - 1].y;
+            to_add.x = v[v.size() - 1].x;
+            to_add.x += 0.1f;
+            break;
+        default:
+            std::cout << "Body part " << v.size() - 1 << "has no valid direction\n";
+            break;
+    }
+
+    to_add.dir = v[v.size() - 1].dir;
+    to_add.scale = v[v.size() - 1].scale - 0.025f;
+
+    v.push_back(to_add);
+}
+
+int Snake::check_next_pos(int p_added, fruit& frt){
+    if(prev_added == frt.pos_coord){
+        std::cout << "got on add part with prev added: "<< prev_added <<"\n";
+        add_part();
+        frt.gen_new_fruit(positions);
+        return 0;
+    }else if(positions.find(prev_added) == positions.end() || prev_added < 0){
+        return 1;
+    }
+    return 2;
 }
