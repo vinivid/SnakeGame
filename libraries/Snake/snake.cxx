@@ -13,53 +13,12 @@
 #include "glm/fwd.hpp"
 #include <shaders.hpp>
 #include "fruit.hpp"
+#include <chrono>
+#include <thread>
 
 Snake::Snake(){
-    //initializes all posible position for the fruit
-    for(int i = 0; i < 400; i++) positions.insert(i);
-    positions.erase(185);
-    positions.erase(184);
-    positions.erase(183);
-
-    //sets the heaad of the snake
-    v[0].x = 0.45f;
-    v[0].y = 0.05f;
-    v[0].scale = 1;
-    v[0].dir = right;
-
-    //initializes the other three body parts
-    for(int i = 1; i < v.size(); i++){
-        switch(v[i-1].dir){
-                case up:
-                    v[i].x = v[i-1].x;
-                    v[i].y -= v[i-1].y + 0.1f;
-                    break;
-                case down:
-                    v[i].x = v[i-1].x;
-                    v[i].y += v[i-1].y + 0.1f;
-                    break;
-                case left:
-                    v[i].y = v[i-1].y;
-                    v[i].x -= v[i-1].x +0.1f;
-                    break;
-                case right:
-                    v[i].y = v[i-1].y;
-                    v[i].x += v[i-1].x + 0.1f;
-                    break;
-                default:
-                    std::cout << "Body part " << i-1 << "has no valid direction\n";
-                    break;
-        }
-
-        v[i].dir = v[i-1].dir;
-        v[i].scale = v[i-1].scale - 0.025f;
-    }
+    init_trhee();
 }
-
-/*The snake moves 0.1f to the direction of its head every routine, wich should be
-about 0.1s. It is necessary to make it so the snake walks in such way so every
-change will be delimited to the coordinate system.
-*/
 
 int Snake::move(fruit& frt){
     count_cicle -= 1;
@@ -96,35 +55,48 @@ int Snake::move(fruit& frt){
             }
         }
         
-        //Adds and removes from the position set
+        int row_prev = prev_added/20;
+        int colum_prev = prev_added%20;
+
         positions.insert(prev_removed);
         switch(v[0].dir){
             case up:
+                row_prev -= 1;
                 prev_added -= 20;
-                check_next_pos(prev_added-20, frt);
+                if(check_next_pos(prev_added-20, row_prev-1, colum_prev,frt))
+                    return 1;
+
                 positions.erase(prev_added);
                 break;
             case down:
+                row_prev += 1;
                 prev_added += 20;
-                check_next_pos(prev_added+20, frt);
+                if(check_next_pos(prev_added+20, row_prev+1,colum_prev,frt))
+                    return 1;
+
                 positions.erase(prev_added);
                 break;
             case left:
+                colum_prev -= 1;
                 prev_added -= 1;
-                check_next_pos(prev_added-1, frt);
+                if(check_next_pos(prev_added-1, row_prev, colum_prev-1,frt))
+                    return 1;
+
                 positions.erase(prev_added);
                 break;
             case right:
+                colum_prev += 1;
                 prev_added += 1;
-                check_next_pos(prev_added+1, frt);
+                if(check_next_pos(prev_added+1,row_prev, colum_prev+1, frt))
+                    return 1;
+
                 positions.erase(prev_added);
                 break;
             default:
                 break;
         }
 
-        std::cout << "prev added: " << prev_added << "\n";
-        std::cout << "posx: " << v[0].x << " posy: " << v[0].y << "\n"; 
+        //std::cout << "prev added: " << prev_added << "\n";
 
         switch(v[v.size()-1].dir){
             case up:
@@ -153,25 +125,25 @@ int Snake::move(fruit& frt){
 //Checks if an arrow key has been pressed, if it has been, put on the list, for it to
 //change the direction of the snake
 void Snake::key_press(GLFWwindow *window){
-    if(glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS){
+    if(v[0].dir != down && glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS){
         if(!used_queue){
             index_turn.push_front(std::pair<int, direction>(0, up));
             used_queue = true;
         }
     }
-    if(glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS){
+    if(v[0].dir != right && glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS){
         if(!used_queue){
             index_turn.push_front(std::pair<int, direction>(0, left));
             used_queue = true;
         }
     }
-    if(glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS){
+    if(v[0].dir != up && glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS){
         if(!used_queue){
              index_turn.push_front(std::pair<int, direction>(0, down));
              used_queue = true;
         }
     }
-    if(glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS){
+    if(v[0].dir != left && glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS){
         if(!used_queue){
              index_turn.push_front(std::pair<int, direction>(0, right));
              used_queue = true;
@@ -199,7 +171,18 @@ void Snake::draw_snake(Control &ctrl, Shader &shd){
     }
 }
 
-//Adds a new body part to the end of the snake
+void Snake::new_snake(){
+    v.resize(3);
+    init_trhee();
+    index_turn.resize(0);
+    prev_removed = 183;
+    prev_added = 185;
+    used_queue = false;
+    count_cicle = 6;
+    using namespace std::chrono_literals;
+    std::this_thread::sleep_for(3s);
+}
+
 void Snake::add_part(){
     body_part to_add;
     to_add.x = 0; to_add.y = 0; to_add.scale = 1; to_add.dir = right;
@@ -231,19 +214,65 @@ void Snake::add_part(){
     }
 
     to_add.dir = v[v.size() - 1].dir;
-    to_add.scale = v[v.size() - 1].scale - 0.025f;
+    to_add.scale = v[v.size() - 1].scale - 0.0024f;
 
     v.push_back(to_add);
 }
 
-int Snake::check_next_pos(int p_added, fruit& frt){
+int Snake::check_next_pos(int p_added, int row_next, int colum_next, fruit& frt){
     if(prev_added == frt.pos_coord){
-        std::cout << "got on add part with prev added: "<< prev_added <<"\n";
         add_part();
         frt.gen_new_fruit(positions);
         return 0;
-    }else if(positions.find(prev_added) == positions.end() || prev_added < 0){
+    }
+    
+    if(row_next >= 21 || row_next <= -2 || colum_next >= 21 || colum_next <= -2){
         return 1;
     }
-    return 2;
+    return 0;
+}
+
+void Snake::init_trhee(){
+    for(int i = 0; i < 400; i++) positions.insert(i);
+    positions.erase(185);
+    positions.erase(184);
+    positions.erase(183);
+
+    v[0].x = 0.45f;
+    v[0].y = 0.05f;
+    v[0].scale = 1;
+    v[0].dir = right;
+
+    std::cout << "snake size: " << v.size() << "\n";
+
+    for(int i = 1; i < v.size(); i++){
+        switch(v[i-1].dir){
+                case up:
+                    v[i].x = v[i-1].x;
+                    v[i].y = v[i-1].y;
+                    v[i].y -= 0.1f;
+                    break;
+                case down:
+                    v[i].x = v[i-1].x;
+                    v[i].y = v[i-1].y;
+                    v[i].y += 0.1f;
+                    break;
+                case left:
+                    v[i].y = v[i-1].y;
+                    v[i].x = v[i-1].x;
+                    v[i].x -= 0.1f;
+                    break;
+                case right:
+                    v[i].y = v[i-1].y;
+                    v[i].x = v[i-1].x;
+                    v[i].x += 0.1f;
+                    break;
+                default:
+                    std::cout << "Body part " << i-1 << "has no valid direction\n";
+                    break;
+        }
+
+        v[i].dir = v[i-1].dir;
+        v[i].scale = v[i-1].scale - 0.0024f;
+    }
 }

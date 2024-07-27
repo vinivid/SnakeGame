@@ -8,7 +8,7 @@
 #include "control.hpp"
 
 fruit::fruit(){
-    pos_x = -0.55f;
+    pos_x = -0.70f;
     pos_y = 0.05f;
     pos_coord = 195;
 }
@@ -28,10 +28,6 @@ void fruit::gen_new_fruit(const std::set<int> &occupied){
     int row = pos_coord/20;
     int colum = pos_coord%20;
     
-    //This is a simple condition so the colums and rows can be transformed to coordinates
-    //to render
-    //the casting is necessary because the position is float and 10 - coordinate should give 
-    //negative numbers
     pos_y =  ((10 - static_cast<float>(row)) - 0.5f)/10;
     pos_x = ((10 - static_cast<float>(colum)) - 1.5f)/10;
     std::cout << "pos frt x: " << pos_x << " pos frt y: " << pos_y << "\n";

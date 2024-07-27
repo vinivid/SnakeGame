@@ -36,11 +36,13 @@ class Snake{
         int prev_added = 185;
 
         void add_part();
-        int check_next_pos(int p_added, fruit& frt);
+        int check_next_pos(int p_added, int row_next, int colum_next, fruit& frt);
+        void init_trhee();
     public:
         Snake();
 
         int move(fruit& frt);
         void key_press(GLFWwindow *window);
         void draw_snake(Control &ctrl, Shader &shd);
+        void new_snake();
 };

@@ -1,8 +1,10 @@
+#include <cstdlib>
 #include <iostream>
+#include <string>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include <set>
 #include "glm/fwd.hpp"
+#include "headers/snake.hpp"
 #include "shaders.hpp"
 #include "control.hpp"
 #include "camera.hpp"
@@ -12,6 +14,24 @@
 void process_input(GLFWwindow *window){
     if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
+}
+
+int handle_end(Snake &snk){
+    std::cout << "Game over!\nDo you wish to continue? [y/n]\n";
+    std::string answer = "a";
+
+    while(answer != "y" && answer != "n"){
+        std::cin >> answer;
+    }
+
+    if(answer == "y"){
+        snk.new_snake();
+        return 1;
+    }else{
+        std::cout << "Bye!\n";
+        return 0;
+    }
+    return 1;
 }
 
 int main(void){
@@ -129,12 +149,16 @@ int main(void){
 
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
+        glfwSetCursorPos(window, 0, 0);
         sts.read_keyboard(window);
         sts.read_mouse(window);
         ctt.set_view_mat(sts.get_view_matrix());
 
         snk.key_press(window);
-        snk.move(frt);
+        if(snk.move(frt))
+            if(!handle_end(snk))
+                return 0;
+            
         snk.draw_snake(ctt, test_shader);
         frt.draw_fruit(ctt, test_shader);
 
