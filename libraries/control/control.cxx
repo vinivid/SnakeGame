@@ -1,3 +1,8 @@
+/* Made by ViniVid
+   https://github.com/vinivid/SnakeGame
+   Contact: frato.vini@gmail.com
+*/
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/ext/matrix_clip_space.hpp>

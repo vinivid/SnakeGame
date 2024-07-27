@@ -1,3 +1,8 @@
+/* Made by ViniVid
+   https://github.com/vinivid/SnakeGame
+   Contact: frato.vini@gmail.com
+*/
+
 #include "snake.hpp"
 
 #include <glad/glad.h>

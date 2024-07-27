@@ -1,3 +1,9 @@
+/* Made by ViniVid
+   https://github.com/vinivid/SnakeGame
+   Contact: frato.vini@gmail.com
+   This was made with basis on the 'LearOpenGl' tutorial at https://learnopengl.com/
+*/
+
 #include <glad/glad.h>
 
 #include "shaders.hpp"

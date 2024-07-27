@@ -1,3 +1,8 @@
+/* Made by ViniVid
+   https://github.com/vinivid/SnakeGame
+   Contact: frato.vini@gmail.com
+*/
+
 #include "glad/glad.h"
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
@@ -8,7 +13,6 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/ext/quaternion_float.hpp>
 #include <glm/ext/quaternion_trigonometric.hpp>
-#include <iostream>
 
 Camera::Camera(){
     up.x = 0; up.y = 1; up.z = 0;

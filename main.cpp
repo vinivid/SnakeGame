@@ -1,3 +1,8 @@
+/* Made by ViniVid
+   https://github.com/vinivid/SnakeGame
+   Contact: frato.vini@gmail.com
+*/
+
 #include <cstdlib>
 #include <iostream>
 #include <string>
@@ -69,16 +74,15 @@ int main(void){
          0.9f, -1.0, 2.01f,  0.211f, 0.211f, 0.211f,
          0.9f,  1.0f, 2.01f,  0.211f, 0.211f, 0.211f,
 
-        //Paralelepied
-        -0.05f, -0.05f,  -0.05f, 0.5f, 0.5f, 0.5f,// 0 4
-         0.05f, -0.05f,  -0.05f, 0.1f, 0.1f, 0.1f,// 1 5
-         0.05f, -0.05f,  0.05f, 0.3f, 0.3f, 0.3f,// 2 6
-         -0.05f, -0.05f, 0.05f, 0.0f, 1.0f, 0.0f,// 3 7
-         -0.05f,  0.05f, 0.05f, 0.0f, 0.0f, 1.0f,//4 8
-         -0.05f, 0.05f,  -0.05f, 1.0f, 0.0f, 0.0f, // 5 9
-         0.05f,  0.05f,  -0.05f, 0.0f, 0.25f, 0.5f, // 6 10
-         0.05f, 0.05f,  0.05f, 0.75f, 0.10f, 0.0f, // 7 11
-
+        //Parallelepiped
+        -0.05f, -0.05f,  -0.05f, 0.5f, 0.5f, 0.5f,
+         0.05f, -0.05f,  -0.05f, 0.1f, 0.1f, 0.1f,
+         0.05f, -0.05f,  0.05f, 0.3f, 0.3f, 0.3f,
+         -0.05f, -0.05f, 0.05f, 0.0f, 1.0f, 0.0f,
+         -0.05f,  0.05f, 0.05f, 0.0f, 0.0f, 1.0f,
+         -0.05f, 0.05f,  -0.05f, 1.0f, 0.0f, 0.0f, 
+         0.05f,  0.05f,  -0.05f, 0.0f, 0.25f, 0.5f, 
+         0.05f, 0.05f,  0.05f, 0.75f, 0.10f, 0.0f,
     };
 
     unsigned int indexes[] = {
@@ -86,7 +90,7 @@ int main(void){
         0,1,2,
         3,1,2,
 
-        //Paralele
+        //Parallelepiped
         4,5,6,
         7,4,6,
         4,5,10,

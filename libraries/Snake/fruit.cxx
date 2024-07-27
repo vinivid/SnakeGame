@@ -1,3 +1,8 @@
+/* Made by ViniVid
+   https://github.com/vinivid/SnakeGame
+   Contact: frato.vini@gmail.com
+*/
+
 #include <glad/glad.h>
 #include "fruit.hpp"
 #include <GLFW/glfw3.h>
@@ -14,7 +19,6 @@ fruit::fruit(){
 }
 
 void fruit::gen_new_fruit(const std::set<int> &occupied){
-    //Gets a random value in the set of available positions
     if(occupied.size() <= 0){
         std::cout << "no spaces left to generate new fruit\n";
         return;
@@ -30,8 +34,6 @@ void fruit::gen_new_fruit(const std::set<int> &occupied){
     
     pos_y =  ((10 - static_cast<float>(row)) - 0.5f)/10;
     pos_x = ((10 - static_cast<float>(colum)) - 1.5f)/10;
-    std::cout << "pos frt x: " << pos_x << " pos frt y: " << pos_y << "\n";
-    std::cout << "row colum pos: " << pos_coord << "\n";
 }
 
 
@@ -47,5 +49,5 @@ void fruit::draw_fruit(Control& ctrl, Shader &shd){
 
     shd.set_uniform_mat4f("translate", ctrl.comb_mat_pointer());
 
-    glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, (void *)(6*sizeof(float)));
+    glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, (void *)(12*sizeof(float)));
 }
