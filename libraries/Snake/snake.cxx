@@ -245,8 +245,6 @@ void Snake::init_snake(){
     v[0].scale = 1;
     v[0].dir = right;
 
-    std::cout << "snake size: " << v.size() << "\n";
-
     for(int i = 1; i < v.size(); i++){
         switch(v[i-1].dir){
                 case up:

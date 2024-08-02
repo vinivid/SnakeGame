@@ -43,8 +43,8 @@ int handle_end(Snake &snk){
 
 int main(void){
     glfwInit();
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_POSITION_X, 500);
     glfwWindowHint(GLFW_POSITION_Y, 250);
@@ -72,7 +72,7 @@ int main(void){
     std::vector<float> posv = {
         //Square
         -1.15f, -1.0f, 2.01f,
-        -1.15f, -1.0f, 2.01f,
+        -1.15f,  1.0f, 2.01f,
         0.9f, -1.0, 2.01f,
         0.9f,  1.0f, 2.01f,
 
@@ -92,6 +92,7 @@ int main(void){
         0.211f, 0.211f, 0.211f,
         0.211f, 0.211f, 0.211f,
         0.211f, 0.211f, 0.211f,
+        0.211f, 0.211f, 0.211f,
 
         //Parallelepiped
         0.5f, 0.5f, 0.5f,
@@ -105,6 +106,7 @@ int main(void){
     };
 
     std::vector<float> tx = {
+        0, 0,
         0, 0,
         0, 0,
         0, 0,
@@ -123,7 +125,6 @@ int main(void){
         //square
         0,1,2,
         3,1,2,
-
         //Parallelepiped
         4,5,6,
         7,4,6,
@@ -146,11 +147,8 @@ int main(void){
 
     indexes_obj idc = indexes;
 
-    std::cout << "got here1\n";
     gl_objects objj(1);
-    std::cout << "got here2\n";
     objj.config_vbo(0, idk);
-    std::cout << "got here3\n";
     objj.config_ibo(0, idc);
     objj.config_vao(0);
 
@@ -182,7 +180,7 @@ int main(void){
 
         test_shader.set_uniform_mat4f("translate", ctt.comb_mat_pointer());
 
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0);
 
         glfwSetCursorPos(window, 0, 0);
         sts.read_keyboard(window);

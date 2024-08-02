@@ -22,18 +22,18 @@ gl_objects::~gl_objects(){
 }
 
 void gl_objects::config_vao(int index) noexcept{
-    glVertexArrayVertexBuffer(VAOs[index], 0, VBOs[vertex_vbo + 3*index], 0, 3*sizeof(float));
-    glVertexArrayVertexBuffer(VAOs[index], 1, VBOs[normal_vbo + 3*index], 0, 3*sizeof(float)); 
-    glVertexArrayVertexBuffer(VAOs[index], 2, VBOs[texture_vbo + 3*index], 0, 3*sizeof(float));
+    glVertexArrayVertexBuffer(VAOs[index], 0, VBOs[vertex_vbo + 3*index], 0, static_cast<GLuint>(3*sizeof(float)));
+    glVertexArrayVertexBuffer(VAOs[index], 1, VBOs[normal_vbo + 3*index], 0, static_cast<GLuint>(3*sizeof(float))); 
+    glVertexArrayVertexBuffer(VAOs[index], 2, VBOs[texture_vbo + 3*index], 0, static_cast<GLuint>(2*sizeof(float)));
     glVertexArrayElementBuffer(VAOs[index], IBOs[index]);
 
     glEnableVertexArrayAttrib(VAOs[index], 0);
     glEnableVertexArrayAttrib(VAOs[index], 1);
     glEnableVertexArrayAttrib(VAOs[index], 2);
 
-    glVertexArrayAttribFormat(VAOs[index], 0, 3, GL_FLOAT, GL_FALSE, static_cast<GLuint>(3*sizeof(float)));
-    glVertexArrayAttribFormat(VAOs[index], 1, 3, GL_FLOAT, GL_FALSE, static_cast<GLuint>(3*sizeof(float)));
-    glVertexArrayAttribFormat(VAOs[index], 2, 2, GL_FLOAT, GL_FALSE, static_cast<GLuint>(3*sizeof(float)));
+    glVertexArrayAttribFormat(VAOs[index], 0, 3, GL_FLOAT, GL_FALSE, 0);
+    glVertexArrayAttribFormat(VAOs[index], 1, 3, GL_FLOAT, GL_FALSE, 0);
+    glVertexArrayAttribFormat(VAOs[index], 2, 2, GL_FLOAT, GL_FALSE, 0);
 
     glVertexArrayAttribBinding(VAOs[index], 0,0);
     glVertexArrayAttribBinding(VAOs[index], 1,1);
