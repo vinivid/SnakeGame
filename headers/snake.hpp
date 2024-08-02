@@ -26,7 +26,6 @@ struct body_part{
 class Snake{
     private:
         std::set<int> positions;
-        //Todo try to not use list
         std::list<std::pair<int, direction>> index_turn;
         std::vector<body_part> v{3};
         //Todo change variable names to be more apropiate
@@ -39,13 +38,13 @@ class Snake{
         int prev_added = 183;
 
         void add_part();
-        int check_next_pos(int row_next, int colum_next, fruit& frt);
+        [[nodiscard]] auto check_next_pos(int row_next, int colum_next, fruit& frt) noexcept->int;
         void init_snake();
         void manage_prev_added();
     public:
         Snake();
 
-        int move(fruit& frt);
+        [[nodiscard]] auto move(fruit& frt) noexcept ->int;
         void key_press(GLFWwindow *window);
         void draw_snake(Control &ctrl, Shader &shd);
         void new_snake();

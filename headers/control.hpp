@@ -7,14 +7,16 @@
     
 class Control{
     private:
-        glm::mat4 rotate;
-        glm::mat4 translate;
-        glm::mat4 scale;
-        glm::mat4 view_matrix;
-        glm::mat4 perspective_frustum;
-        glm::mat4 comb_mat;        
+        glm::mat4 rotate{1.0f};
+        glm::mat4 translate{1.0f};
+        glm::mat4 scale{1.0f};
+        glm::mat4 view_matrix{1.0f};
+        glm::mat4 perspective_frustum{1.0f};
+        glm::mat4 comb_mat{1.0f};
+
+        bool is_comb_mat_calc = false;        
     public:
-        Control();
+        Control() {};
 
         void add_rotate(float angle, glm::vec3 &v);
         void add_translate(float x, float y, float z);
@@ -25,10 +27,10 @@ class Control{
 
         void make_comb_mat(); 
 
-        float* rotate_pointer();
-        float* translate_pointer();
-        float* scale_pointer();
-        float* persepective_poiter();
-        float* comb_mat_pointer();
+        [[nodiscard]] float* rotate_pointer();
+        [[nodiscard]] float* translate_pointer();
+        [[nodiscard]] float* scale_pointer();
+        [[nodiscard]] float* persepective_poiter();
+        [[nodiscard]] float* comb_mat_pointer();
 };
 

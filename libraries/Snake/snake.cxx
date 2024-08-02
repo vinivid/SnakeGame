@@ -25,7 +25,7 @@ Snake::Snake(){
     init_snake();
 }
 
-int Snake::move(fruit& frt){
+[[nodiscard]] auto Snake::move(fruit& frt) noexcept->int{
     count_cicle -= 1;
 
     for(auto i = 0; i < v.size(); i++){
@@ -221,7 +221,7 @@ void Snake::add_part(){
     v.push_back(to_add);
 }
 
-int Snake::check_next_pos(int row_next, int colum_next, fruit& frt){
+[[nodiscard]] auto Snake::check_next_pos(int row_next, int colum_next, fruit& frt) noexcept -> int{
     if(prev_removed == frt.pos_coord){
         add_part();
         frt.gen_new_fruit(positions);
