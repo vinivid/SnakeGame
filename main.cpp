@@ -8,6 +8,7 @@
 #include <string>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <vector>
 #include "glm/fwd.hpp"
 #include "headers/snake.hpp"
 #include "shaders.hpp"
@@ -15,6 +16,7 @@
 #include "camera.hpp"
 #include "snake.hpp"
 #include "fruit.hpp"
+#include "gl_objects.hpp"
 
 void process_input(GLFWwindow *window){
     if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -67,26 +69,58 @@ int main(void){
 
     test_shader.use();
 
-    float vertices[] = {
+    std::vector<float> posv = {
         //Square
-        -1.15f, -1.0f, 2.01f,  0.211f, 0.211f, 0.211f,
-        -1.15f,  1.0f, 2.01f,  0.211f, 0.211f, 0.211f,
-         0.9f, -1.0, 2.01f,  0.211f, 0.211f, 0.211f,
-         0.9f,  1.0f, 2.01f,  0.211f, 0.211f, 0.211f,
+        -1.15f, -1.0f, 2.01f,
+        -1.15f, -1.0f, 2.01f,
+        0.9f, -1.0, 2.01f,
+        0.9f,  1.0f, 2.01f,
 
         //Parallelepiped
-        -0.05f, -0.05f,  -0.05f, 0.5f, 0.5f, 0.5f,
-         0.05f, -0.05f,  -0.05f, 0.1f, 0.1f, 0.1f,
-         0.05f, -0.05f,  0.05f, 0.3f, 0.3f, 0.3f,
-         -0.05f, -0.05f, 0.05f, 0.0f, 1.0f, 0.0f,
-         -0.05f,  0.05f, 0.05f, 0.0f, 0.0f, 1.0f,
-         -0.05f, 0.05f,  -0.05f, 1.0f, 0.0f, 0.0f, 
-         0.05f,  0.05f,  -0.05f, 0.0f, 0.25f, 0.5f, 
-         0.05f, 0.05f,  0.05f, 0.75f, 0.10f, 0.0f,
+        -0.05f, -0.05f,  -0.05f,
+        0.05f, -0.05f,  -0.05f,
+        0.05f, -0.05f,  0.05f,
+        -0.05f, -0.05f, 0.05f,
+        -0.05f,  0.05f, 0.05f,
+        -0.05f, 0.05f,  -0.05f,
+        0.05f,  0.05f,  -0.05f,
+        0.05f, 0.05f,  0.05f,
     };
 
-    unsigned int indexes[] = {
-        //rectangle
+    std::vector<float> normals = {
+        //square
+        0.211f, 0.211f, 0.211f,
+        0.211f, 0.211f, 0.211f,
+        0.211f, 0.211f, 0.211f,
+
+        //Parallelepiped
+        0.5f, 0.5f, 0.5f,
+        0.1f, 0.1f, 0.1f,
+        0.3f, 0.3f, 0.3f,
+        0.0f, 1.0f, 0.0f,
+        0.0f, 0.0f, 1.0f,
+        1.0f, 0.0f, 0.0f,
+        0.0f, 0.25f, 0.5f,
+        0.75f, 0.10f, 0.0f
+    };
+
+    std::vector<float> tx = {
+        0, 0,
+        0, 0,
+        0, 0,
+
+        0,0,
+        0, 0,
+        0, 0,
+        0, 0,
+        0, 0,
+        0, 0,
+        0, 0,
+        0, 0
+    };
+
+    std::vector<unsigned> indexes= {
+        //square
         0,1,2,
         3,1,2,
 
@@ -103,27 +137,22 @@ int main(void){
         9,4,7,
         8,11,9,
         9,10,11
-        };
+    };
 
-    unsigned int VBO, VAO, EBO;
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
-    glGenBuffers(1, &EBO);
+    vertex idk;
+    idk.pos = posv;
+    idk.normal = normals;
+    idk.texture = tx;
 
-    glBindVertexArray(VAO);
+    indexes_obj idc = indexes;
 
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-    
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6*sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6*sizeof(float), (void *)(3*sizeof(float)));
-    glEnableVertexAttribArray(1);
-
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indexes), indexes, GL_STATIC_DRAW);
+    std::cout << "got here1\n";
+    gl_objects objj(1);
+    std::cout << "got here2\n";
+    objj.config_vbo(0, idk);
+    std::cout << "got here3\n";
+    objj.config_ibo(0, idc);
+    objj.config_vao(0);
 
     Control ctt;
     Camera sts;
@@ -134,7 +163,8 @@ int main(void){
     ctt.add_perspective_frustum(60.0f, 800.0f, 600.0f, 0.1f, 100.0f);
 
     glEnable(GL_DEPTH_TEST);
-    glBindVertexArray(VAO);
+
+    objj.bind_vao(0);
 
     glm::vec3 v(0,0,1);
 

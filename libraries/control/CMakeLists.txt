@@ -1,6 +1,7 @@
 add_library(control
     control.cxx 
     shader.cxx
+    gl_objects.cxx
     )
 
 target_include_directories(control PRIVATE "${PROJECT_SOURCE_DIR}/headers")
