@@ -36,6 +36,6 @@ void gl_tex::put_texture(int index, const char *file){
     stbi_image_free(image_data);
 }
 
-void gl_tex::unbind_texture(int index){
+void gl_tex::unbind_texture(int index) noexcept{
     glBindTextureUnit(index, 0);
 }

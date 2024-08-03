@@ -11,7 +11,7 @@ class gl_tex{
         ~gl_tex();
 
         void put_texture(int index,const char *file);
-        void unbind_texture(int index);
+        void unbind_texture(int index) noexcept;
     private:
         std::vector<unsigned> texx;
         int qtt_tex;
