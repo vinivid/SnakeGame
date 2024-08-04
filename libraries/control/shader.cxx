@@ -111,6 +111,10 @@ void Shader::update_shader(const char* uniform, float *val){
     glProgramUniformMatrix4fv(ID, unifroms[uniform].location, unifroms[uniform].count, GL_FALSE, val);
 }
 
+void Shader::update_shader(const char* uniform, int val){
+    glProgramUniform1i(ID, unifroms[uniform].location, val);
+}
+
 
 /*Why use this function instead of using the uniforms names by hand and setting multiple functions for them
 is that the map will automatically throw if you are selecting a wrong uniform and we can

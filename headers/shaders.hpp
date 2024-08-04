@@ -17,6 +17,7 @@ class Shader{
         //Uses the shader program associated with the class
         void use() const noexcept;
         void update_shader(const char* uniform, float *val);
+        void update_shader(const char* uniform, int val);
     private:
         /*This function gets all of the uniforms in the shader and puts them in a
         map of all the uniforms, it basic becomes a validator

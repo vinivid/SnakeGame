@@ -17,6 +17,7 @@
 #include "snake.hpp"
 #include "fruit.hpp"
 #include "gl_objects.hpp"
+#include "textures.hpp"
 
 void process_input(GLFWwindow *window){
     if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -69,6 +70,12 @@ int main(void){
 
     main_shader.use();
 
+    gl_tex textures(3);
+
+    textures.put_texture(0, "grid_background.jpg");
+    textures.put_texture(1, "snake_mc.jpg");
+    textures.put_texture(2, "orange.jpg");
+
     std::vector<float> posv = {
         //Square
         -1.15f, -1.0f, 2.01f,
@@ -107,18 +114,18 @@ int main(void){
 
     std::vector<float> tx = {
         0, 0,
-        0, 0,
-        0, 0,
-        0, 0,
+        0, 1,
+        1, 0,
+        1, 1,
 
-        0,0,
-        0, 0,
-        0, 0,
-        0, 0,
-        0, 0,
-        0, 0,
-        0, 0,
-        0, 0
+        0,0,//0
+        1, 0,//1
+        1, 1,//2
+        0, 1,//3
+        0, 1,//4
+        0, 1,//5
+        1, 1,//6
+        1, 1//7
     };
 
     std::vector<unsigned> indexes= {
@@ -178,6 +185,7 @@ int main(void){
         ctt.add_scale(1, 1,1);
         ctt.make_comb_mat();
 
+        main_shader.update_shader("texture", 0);
         main_shader.update_shader("translate", ctt.comb_mat_pointer());
 
         glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0);

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+
 class gl_tex{
     public:
         gl_tex(int qtt);

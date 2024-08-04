@@ -165,6 +165,7 @@ void Snake::draw_snake(Control &ctrl, Shader &shd){
         }
         ctrl.make_comb_mat();
 
+        shd.update_shader("texture", 1);
         shd.update_shader("translate", ctrl.comb_mat_pointer());
 
         glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, (void *)(6*sizeof(float)));

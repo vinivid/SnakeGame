@@ -13,6 +13,7 @@ add_subdirectory(libraries/control)
 add_subdirectory(libraries/camera)
 add_subdirectory(libraries/glad)
 add_subdirectory(libraries/Snake)
+add_subdirectory(libraries/stbimage)
 
 add_executable(Snake
     main.cpp
