@@ -1,9 +1,11 @@
 #version 330 core
 
-in vec3 col_pos_coord;
+in vec2 tex_pos_coord;
 
 out vec4 frag_vec;
 
+uniform sampler2D texture;
+
 void main(){
-    frag_vec = vec4(col_pos_coord, 1.0);
+    frag_vec = texture2D(texture, tex_pos_coord);
 }
