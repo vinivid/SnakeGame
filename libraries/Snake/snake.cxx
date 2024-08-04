@@ -165,7 +165,7 @@ void Snake::draw_snake(Control &ctrl, Shader &shd){
         }
         ctrl.make_comb_mat();
 
-        shd.set_uniform_mat4f("translate", ctrl.comb_mat_pointer());
+        shd.update_shader("translate", ctrl.comb_mat_pointer());
 
         glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, (void *)(6*sizeof(float)));
     }
@@ -183,7 +183,6 @@ void Snake::new_snake(){
     std::this_thread::sleep_for(3s);
 }
 
-//Todo fix adding or removing wrong position whe the snake is on the edge
 void Snake::add_part(){
     body_part to_add;
     to_add.x = 0; to_add.y = 0; to_add.scale = 1; to_add.dir = right;

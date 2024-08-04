@@ -47,7 +47,7 @@ void fruit::draw_fruit(Control& ctrl, Shader &shd){
     ctrl.add_scale(0.5, 0.5, 1);
     ctrl.make_comb_mat();
 
-    shd.set_uniform_mat4f("translate", ctrl.comb_mat_pointer());
+    shd.update_shader("translate", ctrl.comb_mat_pointer());
 
     glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, (void *)(12*sizeof(float)));
 }

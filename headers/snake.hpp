@@ -1,5 +1,41 @@
 #pragma once
 
+/*Snake Class
+
+    [[nodiscard]] auto move(fruit& frt) noexcept ->int;
+
+    Moves the snake to the direction it is facing in the coordinate system
+
+    Argument: 
+        fruit& frt: is a fruit object of the current game, so it can be 
+        determinet if a fruit will be eaten and generate a new coordinate for 
+        it.
+
+    Return:
+        Returns 1 if the snake has died, must be handled to know if the player
+    wants to continue or not
+    --------------
+    void key_press(GLFWwindow *window);
+
+    Reads the player keypresses and changes the direction of the snake
+    in regards to the key.
+        
+        Argument:
+            GLFWwindow *window: current window being utilized for the game.
+    --------------
+    void draw_snake(Control &ctrl, Shader &shd);
+
+    Draws the snake with basis to the current snake data stored currently
+        Arguments:
+            Control &ctrl: the matrix transformation pipeline so it can apropreiatly
+            translate and rotate.
+            Shader &shd: sends the transformations to the uniforms.
+    --------------
+    void new_snake();
+
+    Creates a new snake with its default values.
+*/
+
 #include <glad/glad.h>
 #include <list>
 #include <utility>
@@ -24,6 +60,13 @@ struct body_part{
 };
 
 class Snake{
+    public:
+        Snake();
+        
+        [[nodiscard]] auto move(fruit& frt) noexcept ->int;
+        void key_press(GLFWwindow *window);
+        void draw_snake(Control &ctrl, Shader &shd);
+        void new_snake();
     private:
         std::set<int> positions;
         std::list<std::pair<int, direction>> index_turn;
@@ -41,11 +84,4 @@ class Snake{
         [[nodiscard]] auto check_next_pos(int row_next, int colum_next, fruit& frt) noexcept->int;
         void init_snake();
         void manage_prev_added();
-    public:
-        Snake();
-
-        [[nodiscard]] auto move(fruit& frt) noexcept ->int;
-        void key_press(GLFWwindow *window);
-        void draw_snake(Control &ctrl, Shader &shd);
-        void new_snake();
 };

@@ -2,11 +2,14 @@
    https://github.com/vinivid/SnakeGame
    Contact: frato.vini@gmail.com
    This was made with basis on the 'LearOpenGl' tutorial at https://learnopengl.com/
+   And also this
+   https://github.com/fendevel/Guide-to-Modern-OpenGL-Functions?tab=CC0-1.0-1-ov-file
 */
 
 #include <glad/glad.h>
 
 #include "shaders.hpp"
+#include <memory>
 #include <string>
 #include <fstream>
 #include <sstream>
@@ -96,44 +99,45 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath){
 
     glDeleteShader(vertex);
     glDeleteShader(fragment);
+
+    get_all_uniforms();
 }
 
-void Shader::use(){
+void Shader::use() const noexcept{
     glUseProgram(ID);
 }
 
-void Shader::set_bool(const std::string& name, bool value) const{
-    unsigned int loc = glGetUniformLocation(ID, name.c_str());
-    if(loc == -1){
-        std::cout << "ERROR GETTING UNIFOR LOCATION\n";
-        return;
-    }
-    glUniform1i(loc, value);
+void Shader::update_shader(const char* uniform, float *val){
+    glProgramUniformMatrix4fv(ID, unifroms[uniform].location, unifroms[uniform].count, GL_FALSE, val);
 }
 
-void Shader::set_int(const std::string& name, int value) const{
-    unsigned int loc = glGetUniformLocation(ID, name.c_str());
-    if(loc == -1){
-        std::cout << "ERROR GETTING UNIFOR LOCATION\n";
-        return;
-    }
-    glUniform1i(loc, value);
-}
 
-void Shader::set_float(const std::string& name, float value) const{
-    unsigned int loc = glGetUniformLocation(ID, name.c_str());
-    if(loc == -1){
-        std::cout << "ERROR GETTING UNIFOR LOCATION\n";
-        return;
-    }
-    glUniform1f(loc, value);
-}
+/*Why use this function instead of using the uniforms names by hand and setting multiple functions for them
+is that the map will automatically throw if you are selecting a wrong uniform and we can
+overload the funciton.
 
-void Shader::set_uniform_mat4f(const std::string &name, float *addres){
-    unsigned int loc = glGetUniformLocation(ID, name.c_str());
-    if(loc == -1){
-        std::cout << "ERROR GETTING UNIFOR LOCATION\n";
-        return;
+It also is quicker because we don't have to keep asking openGL for uniform characteristics
+*/
+void Shader::get_all_uniforms(){
+    glGetProgramiv(ID, GL_ACTIVE_UNIFORMS, &uniform_qtt);
+
+    if(uniform_qtt){
+        GLint max_name_len = 0;
+        GLsizei length = 0;
+        GLsizei count = 0;
+        GLenum type = GL_NONE;
+        glGetProgramiv(ID, GL_ACTIVE_UNIFORM_MAX_LENGTH, &max_name_len);
+
+        auto uniform_name = std::make_unique<char[]>(max_name_len);
+
+        for(GLint i = 0; i < uniform_qtt; ++i){
+            glGetActiveUniform(ID, i, max_name_len, &length, &count, &type, uniform_name.get());
+
+            uniform_info tmp;
+            tmp.location = glGetUniformLocation(ID, uniform_name.get());
+            tmp.count = count;
+
+            unifroms.emplace(std::make_pair(std::string(uniform_name.get(), length), tmp));
+        }
     }
-    glUniformMatrix4fv(loc, 1, GL_FALSE, addres);
 }

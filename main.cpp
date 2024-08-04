@@ -65,9 +65,9 @@ int main(void){
         return -1;
     }
 
-    Shader test_shader("vertex.glsl", "fragment.glsl");
+    Shader main_shader("vertex.glsl", "fragment.glsl");
 
-    test_shader.use();
+    main_shader.use();
 
     std::vector<float> posv = {
         //Square
@@ -171,14 +171,14 @@ int main(void){
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        test_shader.use();
+        main_shader.use();
 
         ctt.add_translate(0, 0, 0);
         ctt.add_rotate(0, v);
         ctt.add_scale(1, 1,1);
         ctt.make_comb_mat();
 
-        test_shader.set_uniform_mat4f("translate", ctt.comb_mat_pointer());
+        main_shader.update_shader("translate", ctt.comb_mat_pointer());
 
         glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0);
 
@@ -192,8 +192,8 @@ int main(void){
             if(!handle_end(snk))
                 return 0;
             
-        snk.draw_snake(ctt, test_shader);
-        frt.draw_fruit(ctt, test_shader);
+        snk.draw_snake(ctt, main_shader);
+        frt.draw_fruit(ctt, main_shader);
 
         glfwSwapBuffers(window);
         process_input(window);
